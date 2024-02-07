@@ -18,10 +18,10 @@ function App() {
 
   useEffect(()=> {
     const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const dt = new date();
+    const dt = new Date();
 
     if (nav !== 0) {
-      dt.setMonth(new Date().getMonth() + nav)
+      dt.setMonth(new Date().getMonth() + nav);
     }
 
     const day = dt.getDate();
@@ -41,6 +41,29 @@ function App() {
     setDateDisplay(`${dt.toLocaleDateString('en-us', { month: 'long' })} ${year}`);
     const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
 
+    const daysArr = [];
+
+    for (let i = 1; i <= paddingDays + daysInMonth; i++ ) {
+       const dayString = `${month + 1}/${i - paddingDays}/${year}`;
+
+      if(i > paddingDays) {
+        daysArr.push({
+          value: i - paddingDays,
+          event: eventForDate(dayString),
+          isCurrentDay: i - paddingDays === day && nav === 0,
+          date: 'dayString',
+        })
+      } else {
+         daysArr.push({
+          value: 'padding',
+          event: null,
+          isCurrentDay: false,
+          date: '',
+        });
+      }
+    }
+
+    setDays(daysArr);
   }, [events, nav]);
 
   return (
@@ -57,17 +80,17 @@ function App() {
         </div>
 
         <div id="calendar">
-          {days.map((d,index) => {
+          {days.map((d, index) => (
             <Day
-              key = {index}
-              day = {d}
-              onClick = {() => {
-                if(day.value !== 'padding') {
-                  setClicked(day.date);
+              key={index}
+              day={d}
+              onClick={() => {
+                if (d.value !== 'padding') {
+                  setClicked(d.date);
                 }
               }}
             />
-          })}
+          ))}
         </div>
       </div>
   )
