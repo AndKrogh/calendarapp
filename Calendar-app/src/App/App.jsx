@@ -1,14 +1,19 @@
 import React,{ useState, useEffect } from 'react';
 import { CalendarHeader } from '../CalendarHeader/CalendarHeader';
 import { Day } from  '../Day/Day';
+import { NewEventModal } from '../NewEventModal/NewEventmodal'; 
+import { DeleteEventModal } from '../DeleteEventModal/DeleteEventModal';
+import { useDate } from '../hooks/useDate';
+
 
 function App() {
   const [nav, setNav] = useState(0);
-  const [days, setDays] = useState([]);
-  const [dateDisplay, setDateDisplay] = useState('');
   const [clicked, setClicked] = useState();
-  
-  const [events, setEvents] = useState(localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : []);
+  const [events, setEvents] = useState(
+    localStorage.getItem('events') ? 
+      JSON.parse(localStorage.getItem('events')) : 
+      []
+  );
 
   const eventForDate = date => events.find(e => e.date === date );
 
@@ -16,59 +21,17 @@ function App() {
     localStorage.setItem('events', JSON.stringify(events));
   }, [events]);
 
-  useEffect(()=> {
-    const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const dt = new Date();
+  const { days, dateDisplay } = useDate(events, nav);
 
-    if (nav !== 0) {
-      dt.setMonth(new Date().getMonth() + nav);
-    }
-
-    const day = dt.getDate();
-    const month = dt.getMonth();
-    const year = dt.getFullYear();
-
-    const firstDayOfMonth = new Date(year, month, 1);
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-    const dateString = firstDayOfMonth.toLocaleDateString('en-us', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-    });
-
-    setDateDisplay(`${dt.toLocaleDateString('en-us', { month: 'long' })} ${year}`);
-    const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
-
-    const daysArr = [];
-
-    for (let i = 1; i <= paddingDays + daysInMonth; i++ ) {
-       const dayString = `${month + 1}/${i - paddingDays}/${year}`;
-
-      if(i > paddingDays) {
-        daysArr.push({
-          value: i - paddingDays,
-          event: eventForDate(dayString),
-          isCurrentDay: i - paddingDays === day && nav === 0,
-          date: 'dayString',
-        })
-      } else {
-         daysArr.push({
-          value: 'padding',
-          event: null,
-          isCurrentDay: false,
-          date: '',
-        });
-      }
-    }
-
-    setDays(daysArr);
-  }, [events, nav]);
 
   return (
+    <>
       <div id="container">
-        <CalendarHeader/>
+        <CalendarHeader
+          dateDisplay={dateDisplay}
+          onNext ={()=> setNav(nav + 1)}
+          onBack ={()=> setNav(nav - 1)}
+        />
         <div id="weekdays">
           <div>Sunday</div>
           <div>Monday</div>
@@ -93,6 +56,29 @@ function App() {
           ))}
         </div>
       </div>
+      {
+        clicked && !eventForDate(clicked) &&
+        <NewEventModal
+          onClose={() => setClicked(null)}
+          onSave={title => {
+            setEvents([ ...events, { title, date: clicked }]);
+            setClicked(null);
+          }}
+        />
+      }
+
+      {
+        clicked && eventForDate(clicked) &&
+        <DeleteEventModal 
+          eventText={eventForDate(clicked).title}
+          onClose={() => setClicked(null)}
+          onDelete={() => {
+            setEvents(events.filter(e => e.date !== clicked));
+            setClicked(null);
+          }}
+        />
+      }
+    </>
   )
 }
 
