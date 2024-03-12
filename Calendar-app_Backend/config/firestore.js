@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore';
+const { initializeApp } = require("firebase/app");
+const { getFirestore, doc, setDoc } = require('firebase/firestore');
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
  
@@ -24,22 +24,39 @@ const firebaseConfig = {
 
 };
 
-// Initialize Firebase
-let app = initializeApp(firebaseConfig);
+let app;
 let firestoreDB;
 
-const getFirebaseApp = () => {
+// Initialize Firebase
+const initializeFirebaseApp = () => {
     try {
         app = initializeApp(firebaseConfig);
         firestoreDB = getFirestore();
         return app;
-    }
-    catch(error) {
+    } catch(error) {
         errorHandler(error,  "firebase-initializeFirebaseApp");
     }
 };
 
+const uploadProcessedData = async () => {
+    const dataToUpload = {
+        key1: "test",
+        key2: new Date(),
+        key3: 123,
+    };
+    try {
+        const document = doc(firestoreDB, "Tasks", "BpxLQZEl0bAJxpDnlgha");
+        let dataUpdated = await setDoc(document, dataToUpload);
+        return dataUpdated;
+    } catch(error) {
+        errorHandler(error, "firebase-uploadProcessedData");
+    }
+};
+
+const getFirebaseApp = () => app;
+
 module.exports = {
-    initializeApp,
+    initializeFirebaseApp,
     getFirebaseApp,
+    uploadProcessedData,
 };
