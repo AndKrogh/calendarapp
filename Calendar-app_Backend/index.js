@@ -1,18 +1,21 @@
 const express = require('express');
 const app = express();
-const { initializeFirebaseApp } = require("./config/firestore");
-const { uploadProcessedData } = require("./config/firestore");
+const PORT = app.listen(process.env.PORT || 3001);
+const { initializeFirebaseApp, getTheData } = require("./config/firestore");
+
+
 initializeFirebaseApp();
 
 app.get('/', (req, res) => {
-  res.send('Testing Hello World!')
+  res.send("hejeff");
+  
 });
 
-app.post('/postToFireStore', async (req, res) => {
-    await uploadProcessedData();
-    return "succes";
+app.get('/getDataFromFireStore', async (req, res) => {
+    const data = await getTheData();
+    return JSON.stringify(data);
 })
 
-app.listen('3001', () => {
+app.listen(PORT, () => {
     console.log("Server running on port 3001");
 });
