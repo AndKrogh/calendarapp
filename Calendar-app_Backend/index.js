@@ -1,18 +1,22 @@
-const express = require('express');
+const express = require("express");
+const { firestoreDB, verifyFirebaseToken } = require("./config/firestore");
+const { collection, getDocs } = require("firebase/firestore");
+
 const app = express();
 const PORT = process.env.PORT || 3001;
-const { initializeFirebaseApp, getTheData } = require("./config/firestore");
 
-initializeFirebaseApp();
-
-app.get('/', (req, res) => {
-    res.send("hejeff");
+app.get("/", (req, res) => {
+    res.send("Welcome to Firestore API!");
 });
 
-app.get('/getDataFromFireStore', async (req, res) => {
+//Secured api route 
+app.get("/getDataFromFireStore", verifyFirebaseToken, async (req, res) => {
     try {
-        const data = await getTheData();
-        res.json(data);
+        const collectionRef = collection(firestoreDB, "events");
+        const docSnap = await getDocs(collectionRef);
+        const finalData = docSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        res.json(finalData);
     } catch (error) {
         res.status(500).json({ error: "Error fetching data" });
     }
