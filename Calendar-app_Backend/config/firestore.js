@@ -1,80 +1,44 @@
-﻿const { initializeApp } = require("firebase/app");
-const {
-    getFirestore,
-    doc,
-    setDoc,
-    getDocs,
-    collection,
-    query
-} = require("firebase/firestore");
+﻿const admin = require("firebase-admin");
+const { initializeApp } = require("firebase/app");
+const { getFirestore, collection, getDocs } = require("firebase/firestore");
+require("dotenv").config();
 
-const {
-    FIREBASE_API_KEY,
-    FIREBASE_AUTH_DOMAIN,
-    FIREBASE_PROJECT_ID,
-    FIREBASE_STORAGE_BUCKET,
-    FIREBASE_MESSAGE_SENDER_ID,
-    FIREBASE_APP_ID
-} = process.env;
+const serviceAccount = require("./serviceAccountKey.json");  
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+});
 
 const firebaseConfig = {
-    apiKey: FIREBASE_API_KEY,
-    authDomain: FIREBASE_AUTH_DOMAIN,
-    projectId: FIREBASE_PROJECT_ID,
-    storageBucket: FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: FIREBASE_MESSAGE_SENDER_ID,
-    appId: FIREBASE_APP_ID
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.FIREBASE_MESSAGE_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID
 };
 
-let app;
-let firestoreDB;
+const app = initializeApp(firebaseConfig);
+const firestoreDB = getFirestore(app);
 
-const initializeFirebaseApp = () => {
-    try {
-        app = initializeApp(firebaseConfig);
-        firestoreDB = getFirestore(app);
-        console.log("Firebase initialized!");
-    } catch (error) {
-        console.error("Firebase init error:", error);
+// Middleware to verify firebase auth token
+const verifyFirebaseToken = async (req, res, next) => {
+    const token = req.headers.authorization?.split("Bearer ")[1]; 
+
+    if (!token) {
+        return res.status(401).json({ error: "Unauthorized: No token provided" });
     }
-};
 
-const uploadProcessedData = async () => {
-    const dataToUpload = {
-        key1: "test",
-        key2: new Date(),
-        key3: 123,
-    };
     try {
-        const document = doc(firestoreDB, "Tasks", "testing-unique-id");
-        await setDoc(document, dataToUpload);
-        console.log("Data uploaded successfully!");
+        const decodedToken = await admin.auth().verifyIdToken(token);
+        req.user = decodedToken; 
+        next();
     } catch (error) {
-        console.error("Error uploading data:", error);
-    }
-};
-
-const getTheData = async () => {
-    try {
-        const collectionRef = collection(firestoreDB, "events");
-        const finalData = [];
-        const q = query(collectionRef);
-        const docSnap = await getDocs(q);
-
-        docSnap.docs.forEach((doc) => {
-            finalData.push({ id: doc.id, ...doc.data() });
-        });
-
-        console.log(`Retrieved ${finalData.length} documents`);
-        return finalData;
-    } catch (error) {
-        console.error("Error retrieving data:", error);
-        return [];
+        return res.status(403).json({ error: "Unauthorized: Invalid token" });
     }
 };
 
 module.exports = {
-    initializeFirebaseApp,
-    uploadProcessedData,
-    getTheData,
+    firestoreDB,
+    verifyFirebaseToken,
 };
