@@ -1,21 +1,20 @@
-export const fetchEvents = async () => {
-    try {
-        const response = await fetch("http://localhost:3001/getDataFromFireStore", {
-            method: "GET",
-            headers: {
-                "Authorization": "Bearer your-hardcoded-token-here",
-                "Content-Type": "application/json"
-            }
-        });
+import { useState, useEffect } from 'react';
 
-        if (!response.ok) {
-            throw new Error("Failed to fetch events");
-        }
+const useFetchEvents = () => {
+    const [events, setEvents] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("Error fetching events:", error);
-        return [];
-    }
+    useEffect(() => {
+        fetch('http://localhost:3001/getDataFromFireStore') 
+            .then(response => response.json())
+            .then(data => {
+                setEvents(data);
+                setLoading(false);
+            })
+            .catch(error => console.error('Error fetching events:', error));
+    }, []);
+
+    return { events, loading };
 };
+
+export default useFetchEvents;

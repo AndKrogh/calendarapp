@@ -1,10 +1,19 @@
-import React,{ useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { CalendarHeader } from '../CalendarHeader/CalendarHeader';
 import { Day } from  '../Day/Day';
 import { NewEventModal } from '../NewEventModal/NewEventmodal'; 
 import { DeleteEventModal } from '../DeleteEventModal/DeleteEventModal';
 import { useDate } from '../hooks/useDate';
 
+const App = () => {
+    return (
+        <div>
+            <h1>Welcome to the Calendar App</h1>
+            <Link to="/events">View Events</Link>
+        </div>
+    );
+};
 
 function App() {
   const [nav, setNav] = useState(0);
