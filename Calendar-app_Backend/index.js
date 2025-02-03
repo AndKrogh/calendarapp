@@ -1,5 +1,5 @@
 const express = require("express");
-const { firestoreDB, verifyFirebaseToken } = require("./config/firestore");
+const { firestoreDB } = require("./config/firestore"); // Remove verifyFirebaseToken
 const { collection, getDocs } = require("firebase/firestore");
 
 const app = express();
@@ -9,8 +9,8 @@ app.get("/", (req, res) => {
     res.send("Welcome to Firestore API!");
 });
 
-//Secured api route 
-app.get("/getDataFromFireStore", verifyFirebaseToken, async (req, res) => {
+// ? Public API Route - No Authentication Required
+app.get("/getDataFromFireStore", async (req, res) => {
     try {
         const collectionRef = collection(firestoreDB, "events");
         const docSnap = await getDocs(collectionRef);
@@ -18,7 +18,7 @@ app.get("/getDataFromFireStore", verifyFirebaseToken, async (req, res) => {
 
         res.json(finalData);
     } catch (error) {
-        res.status(500).json({ error: "Error fetching data" });
+        res.status(500).json({ error: "Error fetching data", details: error.message });
     }
 });
 

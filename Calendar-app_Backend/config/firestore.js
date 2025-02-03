@@ -1,7 +1,8 @@
 ﻿const { initializeApp } = require("firebase/app");
-const { getFirestore, collection, getDocs } = require("firebase/firestore");
-require("dotenv").config(); 
+const { getFirestore } = require("firebase/firestore");
+require("dotenv").config();
 
+// Firebase Config (Client SDK)
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
     authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -11,26 +12,8 @@ const firebaseConfig = {
     appId: process.env.FIREBASE_APP_ID
 };
 
+// Initialize Firebase Client SDK
 const app = initializeApp(firebaseConfig);
 const firestoreDB = getFirestore(app);
 
-const HARDCODED_TOKEN = process.env.HARDCODED_AUTH_TOKEN || "your-hardcoded-token-here";
-
-// Middleware to validate hardcoded token
-const verifyFirebaseToken = async (req, res, next) => {
-    const token = req.headers.authorization?.split("Bearer ")[1];
-
-    if (!token) {
-        return res.status(401).json({ error: "Unauthorized: No token provided" });
-    }
-
-    if (token !== HARDCODED_TOKEN) {
-        return res.status(403).json({ error: "Unauthorized: Invalid token" });
-    }
-
-    // Mock user data
-    req.user = { uid: "test-user-123", email: "test@example.com" };
-    next();
-};
-
-module.exports = { firestoreDB, verifyFirebaseToken };
+module.exports = { firestoreDB };
