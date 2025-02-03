@@ -1,94 +1,78 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import { CalendarHeader } from '../CalendarHeader/CalendarHeader';
-import { Day } from  '../Day/Day';
-import { NewEventModal } from '../NewEventModal/NewEventmodal'; 
+import { Day } from '../Day/Day';
+import { NewEventModal } from '../NewEventModal/NewEventmodal';
 import { DeleteEventModal } from '../DeleteEventModal/DeleteEventModal';
 import { useDate } from '../hooks/useDate';
-
-const Route = () => {
-    return (
-        <div>
-            <h1>Welcome to the Calendar App</h1>
-            <Link to="/events">View Events</Link>
-        </div>
-    );
-};
+import useFetchEvents from '../hooks/useFirebase'; 
 
 function App() {
-  const [nav, setNav] = useState(0);
-  const [clicked, setClicked] = useState();
-  const [events, setEvents] = useState(
-    localStorage.getItem('events') ? 
-      JSON.parse(localStorage.getItem('events')) : 
-      []
-  );
+    const [nav, setNav] = useState(0);
+    const [clicked, setClicked] = useState(null);
 
-  const eventForDate = date => events.find(e => e.date === date );
+    const { events, loading } = useFetchEvents();
 
-  useEffect(() => {
-    localStorage.setItem('events', JSON.stringify(events));
-  }, [events]);
+    const { days, dateDisplay } = useDate(events, nav);
 
-  const { days, dateDisplay } = useDate(events, nav);
+    if (loading) return <div>Loading events...</div>;
 
+    return (
+        <>
+            <div id="container">
+                <CalendarHeader
+                    dateDisplay={dateDisplay}
+                    onNext={() => setNav(nav + 1)}
+                    onBack={() => setNav(nav - 1)}
+                />
+                <div id="weekdays">
+                    <div>Sunday</div>
+                    <div>Monday</div>
+                    <div>Tuesday</div>
+                    <div>Wednesday</div>
+                    <div>Thursday</div>
+                    <div>Friday</div>
+                    <div>Saturday</div>
+                </div>
 
-  return (
-    <>
-      <div id="container">
-        <CalendarHeader
-          dateDisplay={dateDisplay}
-          onNext ={()=> setNav(nav + 1)}
-          onBack ={()=> setNav(nav - 1)}
-        />
-        <div id="weekdays">
-          <div>Sunday</div>
-          <div>Monday</div>
-          <div>Tuesday</div>
-          <div>Wednesday</div>
-          <div>Thursday</div>
-          <div>Friday</div>
-          <div>Saturday</div>
-        </div>
+                <div id="calendar">
+                    {days.map((d, index) => (
+                        <Day
+                            key={index}
+                            day={d}
+                            onClick={() => {
+                                if (d.value !== 'padding') {
+                                    setClicked(d.date);
+                                }
+                            }}
+                        />
+                    ))}
+                </div>
+            </div>
 
-        <div id="calendar">
-          {days.map((d, index) => (
-            <Day
-              key={index}
-              day={d}
-              onClick={() => {
-                if (d.value !== 'padding') {
-                  setClicked(d.date);
-                }
-              }}
-            />
-          ))}
-        </div>
-      </div>
-      {
-        clicked && !eventForDate(clicked) &&
-        <NewEventModal
-          onClose={() => setClicked(null)}
-          onSave={title => {
-            setEvents([ ...events, { title, date: clicked }]);
-            setClicked(null);
-          }}
-        />
-      }
+            {
+                clicked && !events.find(e => e.date === clicked) &&
+                <NewEventModal
+                    onClose={() => setClicked(null)}
+                    onSave={title => {
+                        console.log("New Event:", { title, date: clicked });
+                        setClicked(null);
+                    }}
+                />
+            }
 
-      {
-        clicked && eventForDate(clicked) &&
-        <DeleteEventModal 
-          eventText={eventForDate(clicked).title}
-          onClose={() => setClicked(null)}
-          onDelete={() => {
-            setEvents(events.filter(e => e.date !== clicked));
-            setClicked(null);
-          }}
-        />
-      }
-    </>
-  )
+            {
+                clicked && events.find(e => e.date === clicked) &&
+                <DeleteEventModal
+                    eventText={events.find(e => e.date === clicked).title}
+                    onClose={() => setClicked(null)}
+                    onDelete={() => {
+                        console.log("Deleting event:", clicked);
+                        setClicked(null);
+                    }}
+                />
+            }
+        </>
+    );
 }
 
 export default App;

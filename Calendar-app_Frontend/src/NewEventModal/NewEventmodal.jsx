@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+
 export const NewEventModal = ({ onSave, onClose }) => {
   const [title, setTitle] = useState('');
   const [error, setError] = useState(false);
