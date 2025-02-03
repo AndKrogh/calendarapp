@@ -6,7 +6,7 @@ import { NewEventModal } from '../NewEventModal/NewEventmodal';
 import { DeleteEventModal } from '../DeleteEventModal/DeleteEventModal';
 import { useDate } from '../hooks/useDate';
 
-const App = () => {
+const Route = () => {
     return (
         <div>
             <h1>Welcome to the Calendar App</h1>
