@@ -1,5 +1,5 @@
 const express = require("express");
-const { firestoreDB } = require("./config/firestore"); // Remove verifyFirebaseToken
+const { firestoreDB } = require("./config/firestore"); 
 const { collection, getDocs } = require("firebase/firestore");
 
 const app = express();
@@ -9,7 +9,6 @@ app.get("/", (req, res) => {
     res.send("Welcome to Firestore API!");
 });
 
-// ? Public API Route - No Authentication Required
 app.get("/getDataFromFireStore", async (req, res) => {
     try {
         const collectionRef = collection(firestoreDB, "events");
