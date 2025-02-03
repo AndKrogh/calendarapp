@@ -2,7 +2,6 @@
 const { getFirestore } = require("firebase/firestore");
 require("dotenv").config();
 
-// Firebase Config (Client SDK)
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
     authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -12,7 +11,6 @@ const firebaseConfig = {
     appId: process.env.FIREBASE_APP_ID
 };
 
-// Initialize Firebase Client SDK
 const app = initializeApp(firebaseConfig);
 const firestoreDB = getFirestore(app);
 
