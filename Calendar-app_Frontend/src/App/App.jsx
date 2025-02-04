@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { CalendarHeader } from '../CalendarHeader/CalendarHeader';
 import { Day } from '../Day/Day';
-import { NewEventModal } from '../NewEventModal/NewEventmodal';
+import { NewEventModal } from '../NewEventModal/NewEventModal';
 import { DeleteEventModal } from '../DeleteEventModal/DeleteEventModal';
 import { useDate } from '../hooks/useDate';
-import useFetchEvents from '../hooks/useFirebase'; 
+import { useFirestore } from '../hooks/UseFirebase'; 
 
 function App() {
     const [nav, setNav] = useState(0);
     const [clicked, setClicked] = useState(null);
 
-    const { events, loading } = useFetchEvents();
+  
+    const { events, loading, addEvent, deleteEvent } = useFirestore();
 
     const { days, dateDisplay } = useDate(events, nav);
 
@@ -52,9 +53,10 @@ function App() {
             {
                 clicked && !events.find(e => e.date === clicked) &&
                 <NewEventModal
+                    selectedDate={clicked}
                     onClose={() => setClicked(null)}
-                    onSave={title => {
-                        console.log("New Event:", { title, date: clicked });
+                    onSave={(event) => {
+                        addEvent({ name: event, date: clicked });
                         setClicked(null);
                     }}
                 />
@@ -63,10 +65,11 @@ function App() {
             {
                 clicked && events.find(e => e.date === clicked) &&
                 <DeleteEventModal
-                    eventText={events.find(e => e.date === clicked).title}
+                    eventId={events.find(e => e.date === clicked).id}
+                    eventText={events.find(e => e.date === clicked).name}
                     onClose={() => setClicked(null)}
-                    onDelete={() => {
-                        console.log("Deleting event:", clicked);
+                    onDelete={(eventId) => {
+                        deleteEvent(eventId);
                         setClicked(null);
                     }}
                 />

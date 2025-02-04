@@ -34,7 +34,6 @@ export const useFirestore = () => {
         }
     };
 
-
     const deleteEvent = async (eventId) => {
         try {
             const response = await fetch(`${API_URL}/deleteEvent/${eventId}`, {
