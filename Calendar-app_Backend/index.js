@@ -9,10 +9,6 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-    res.send("Welcome to Firestore API!");
-});
-
 app.get("/getDataFromFireStore", async (req, res) => {
     try {
         const collectionRef = collection(firestoreDB, "events");

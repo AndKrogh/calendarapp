@@ -56,7 +56,7 @@ function App() {
                     selectedDate={clicked}
                     onClose={() => setClicked(null)}
                     onSave={(event) => {
-                        addEvent({ name: event, date: clicked });
+                        addEvent(event);
                         setClicked(null);
                     }}
                 />

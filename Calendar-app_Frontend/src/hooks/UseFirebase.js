@@ -24,11 +24,11 @@ export const useFirestore = () => {
             const response = await fetch(`${API_URL}/addEvent`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(event),
+                body: JSON.stringify(event), 
             });
 
             const data = await response.json();
-            setEvents([...events, { id: data.id, ...event }]); 
+            setEvents([...events, { id: data.id, ...event }]);
         } catch (error) {
             console.error("Error adding event:", error);
         }

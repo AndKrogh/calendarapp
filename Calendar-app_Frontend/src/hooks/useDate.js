@@ -4,10 +4,29 @@ export const useDate = (events, nav) => {
     const [dateDisplay, setDateDisplay] = useState('');
     const [days, setDays] = useState([]);
 
-    const eventForDate = date => {
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        if (isNaN(date)) return 'Invalid Date';
+
+        return new Intl.DateTimeFormat('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+        }).format(date);
+    };
+
+    const eventForDate = (date) => {
+
         return events.find(e => {
-            const eventDate = new Date(e.date.seconds * 1000).toLocaleDateString();
-            return eventDate === date;
+            if (!e.date) return false;
+
+            const eventDate = new Date(e.date);
+            if (isNaN(eventDate)) return false;
+
+            const formattedEventDate = eventDate.toISOString().split('T')[0];
+            const formattedCalendarDate = new Date(date).toISOString().split('T')[0];
+
+            return formattedEventDate === formattedCalendarDate;
         });
     };
 
@@ -38,21 +57,15 @@ export const useDate = (events, nav) => {
         const daysArr = [];
 
         for (let i = 1; i <= paddingDays + daysInMonth; i++) {
-            const dayString = new Date(year, month, i - paddingDays).toLocaleDateString();
+            const dateObj = new Date(year, month, i - paddingDays);
+            const formattedDate = formatDate(dateObj);
 
             if (i > paddingDays) {
                 daysArr.push({
                     value: i - paddingDays,
-                    event: eventForDate(dayString),
+                    event: eventForDate(formattedDate),
                     isCurrentDay: i - paddingDays === day && nav === 0,
-                    date: dayString,
-                });
-            } else {
-                daysArr.push({
-                    value: 'padding',
-                    event: null,
-                    isCurrentDay: false,
-                    date: '',
+                    date: formattedDate,
                 });
             }
         }

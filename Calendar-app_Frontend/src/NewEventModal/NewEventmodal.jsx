@@ -4,6 +4,26 @@ export const NewEventModal = ({ onSave, onClose, selectedDate }) => {
     const [title, setTitle] = useState('');
     const [error, setError] = useState(false);
 
+const handleSave = () => {
+    if (!title) {
+        setError(true);
+        return;
+    }
+
+    const event = {
+        name: title,
+        date: selectedDate,
+    };
+
+    console.log("Event:", event); 
+
+    onSave(event); 
+
+    setTitle('');
+    setError(false);
+};
+
+
     return (
         <>
             <div id="newEventModal">
@@ -15,18 +35,7 @@ export const NewEventModal = ({ onSave, onClose, selectedDate }) => {
                     id="eventTitleInput"
                     placeholder="Event Title"
                 />
-                <button
-                    onClick={() => {
-                        if (!title) {
-                            setError(true);
-                            return;
-                        }
-                        onSave({ name: title, date: selectedDate }); 
-                        setTitle('');
-                        setError(false);
-                    }}
-                    id="saveButton"
-                >
+                <button onClick={handleSave} id="saveButton">
                     Save
                 </button>
                 <button onClick={onClose} id="cancelButton">Cancel</button>
