@@ -9,4 +9,4 @@ router.post("/", eventController.createEvent);
 router.delete("/:id", eventController.removeEvent);
 router.put("/:id", eventController.editEvent);
 
-module.exports = router;
+export default router;
