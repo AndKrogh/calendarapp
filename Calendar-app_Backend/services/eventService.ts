@@ -29,4 +29,9 @@ const updateEvent = async (id: string, updatedData: Partial<Event>): Promise<voi
     await updateDoc(eventDoc, updatedData);
 };
 
-export { getAllEvents, addEvent, deleteEvent, updateEvent };
+export default {
+    getAllEvents,
+    addEvent,
+    deleteEvent,
+    updateEvent
+};

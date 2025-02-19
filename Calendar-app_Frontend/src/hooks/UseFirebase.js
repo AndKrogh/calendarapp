@@ -9,7 +9,7 @@ export const useFirestore = () => {
     const fetchEvents = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`${API_URL}/getDataFromFireStore`);
+            const response = await fetch(`${API_URL}/events/getDataFromFireStore`);
             const data = await response.json();
             setEvents(data);
         } catch (error) {
@@ -21,7 +21,7 @@ export const useFirestore = () => {
 
     const addEvent = async (event) => {
         try {
-            const response = await fetch(`${API_URL}/addEvent`, {
+            const response = await fetch(`${API_URL}/events/addEvent`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(event), 
@@ -36,7 +36,7 @@ export const useFirestore = () => {
 
     const deleteEvent = async (eventId) => {
         try {
-            const response = await fetch(`${API_URL}/deleteEvent/${eventId}`, {
+            const response = await fetch(`${API_URL}/events/deleteEvent/${eventId}`, {
                 method: 'DELETE',
             });
 
@@ -52,7 +52,7 @@ export const useFirestore = () => {
 
     const updateEvent = async (eventId, updatedData) => {
         try {
-            const response = await fetch(`${API_URL}/updateEvent/${eventId}`, {
+            const response = await fetch(`${API_URL}/events/updateEvent/${eventId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updatedData),
