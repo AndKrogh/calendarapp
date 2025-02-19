@@ -3,7 +3,7 @@ import cors from "cors";
 import eventRoutes from "./routes/eventRoutes";
 
 const app = express();
-const PORT: number = Number(process.env.PORT) || 3001;
+const PORT: number = Number(process.env.PORT) || 3002;
 
 app.use(cors());
 app.use(express.json());
