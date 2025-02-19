@@ -1,0 +1,22 @@
+{
+  "name": "kalender-app",
+  "version": "1.0.0",
+  "description": "Welcome to Calendar App. This application is a calendar app to track events.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd Calendar-app_Backend && node index.js",
+    "client": "cd Calendar-app_Frontend && npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndKrogh/calendarapp.git"
+  },
+  "author": "Anders",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndKrogh/calendarapp/issues"
+  },
+  "homepage": "https://github.com/AndKrogh/calendarapp#readme"
+}
