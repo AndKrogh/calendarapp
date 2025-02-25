@@ -19,7 +19,7 @@ interface DayType {
 
 function App() {
     const [nav, setNav] = useState<number>(0);
-    const [clicked, setClicked] = useState(null);
+    const [clicked, setClicked] = useState<string | null>(null);
 
   
     const { events, loading, addEvent, deleteEvent } = useFirestore();
@@ -47,7 +47,7 @@ function App() {
                 </div>
 
                 <div id="calendar">
-                    {days.map((d, index) => (
+                    {days.map((d:DayType, index:number) => (
                         <Day
                             key={index}
                             day={d}
@@ -62,11 +62,11 @@ function App() {
             </div>
 
             {
-                clicked && !events.find(e => e.date === clicked) &&
+                clicked && !events.find((e:Event) => e.date === clicked) &&
                 <NewEventModal
                     selectedDate={clicked}
                     onClose={() => setClicked(null)}
-                    onSave={(event) => {
+                    onSave={(event:Event) => {
                         addEvent(event);
                         setClicked(null);
                     }}
@@ -74,12 +74,12 @@ function App() {
             }
 
             {
-                clicked && events.find(e => e.date === clicked) &&
+                clicked && events.find((e:Event) => e.date === clicked) &&
                 <DeleteEventModal
-                    eventId={events.find(e => e.date === clicked).id}
-                    eventText={events.find(e => e.date === clicked).name}
+                    eventId={events.find(e: Event) => e.date === clicked).id}
+                    eventText={events.find(e: Event) => e.date === clicked).name}
                     onClose={() => setClicked(null)}
-                    onDelete={(eventId) => {
+                    onDelete={(eventId:string) => {
                         deleteEvent(eventId);
                         setClicked(null);
                     }}
