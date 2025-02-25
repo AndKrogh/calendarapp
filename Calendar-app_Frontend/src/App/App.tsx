@@ -6,8 +6,19 @@ import { DeleteEventModal } from '../DeleteEventModal/DeleteEventModal';
 import { useDate } from '../hooks/useDate';
 import { useFirestore } from '../hooks/UseFirebase'; 
 
+interface Event {
+    id: string;
+    date: string;
+    name: string;
+}
+
+interface DayType {
+    date: string;
+    value: string;
+}
+
 function App() {
-    const [nav, setNav] = useState(0);
+    const [nav, setNav] = useState<number>(0);
     const [clicked, setClicked] = useState(null);
 
   
