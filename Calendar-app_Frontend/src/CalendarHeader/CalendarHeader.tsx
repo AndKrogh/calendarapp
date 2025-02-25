@@ -1,7 +1,13 @@
 import React from 'react';
 
-export const CalendarHeader = ({ onNext, onBack, dateDisplay }) => {
-  return(
+interface CalendarHeaderProps {
+    onBack: () => void;
+    onNext: () => void;
+    dateDisplay: string;
+}
+
+export const CalendarHeader: React.FC<CalendarHeaderProps> = ({ onNext, onBack, dateDisplay }) => {
+  return (
     <div id="header">
       <div id="monthDisplay">{dateDisplay}</div>
       <div>
