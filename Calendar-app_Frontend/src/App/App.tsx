@@ -74,12 +74,12 @@ function App() {
             }
 
             {
-                clicked && events.find((e:Event) => e.date === clicked) &&
+                clicked && events.find((e) => e.date === clicked) &&
                 <DeleteEventModal
-                    eventId={events.find(e: Event) => e.date === clicked).id}
-                    eventText={events.find(e: Event) => e.date === clicked).name}
+                    eventId={events.find(e => e.date === clicked)?.id}
+                    eventText={events.find(e => e.date === clicked)?.name}
                     onClose={() => setClicked(null)}
-                    onDelete={(eventId:string) => {
+                    onDelete={(eventId: string) => {
                         deleteEvent(eventId);
                         setClicked(null);
                     }}
