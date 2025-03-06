@@ -6,14 +6,16 @@ interface CalendarHeaderProps {
     dateDisplay: string;
 }
 
-export const CalendarHeader: React.FC<CalendarHeaderProps> = ({ onNext, onBack, dateDisplay }) => {
-  return (
-    <div id="header">
-      <div id="monthDisplay">{dateDisplay}</div>
-      <div>
-        <button onClick={onBack} id="backButton">Back</button>
-        <button onClick={onNext} id="nextButton">Next</button>
-      </div>
-    </div>
-  );
+export const CalendarHeader = (props: CalendarHeaderProps) => {
+    const { onBack, onNext, dateDisplay } = props;
+
+    return (
+        <div id="header">
+            <div id="monthDisplay">{dateDisplay}</div>
+            <div>
+                <button onClick={onBack} id="backButton">Back</button>
+                <button onClick={onNext} id="nextButton">Next</button>
+            </div>
+        </div>
+    );
 };
