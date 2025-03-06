@@ -3,8 +3,8 @@ import React from 'react';
 interface deleteEventsProps {
     eventText: string;
     onClose: () => void;
-    onDelete: (eventId: number) => void;
-    eventId: number;
+    onDelete: (eventId: string) => void;
+    eventId: string;
 }
 
 export const DeleteEventModal = ({ eventText, onClose, onDelete, eventId }: deleteEventsProps) => {

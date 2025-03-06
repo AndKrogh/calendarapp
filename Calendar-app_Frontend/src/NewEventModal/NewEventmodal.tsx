@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 
-export const NewEventModal = ({ onSave, onClose, selectedDate }) => {
+interface newEventProps {
+    onSave: (event: eventId) => void;
+    onClose: () => void;
+    selectedDate: string;
+}
+
+export const NewEventModal = ({ onSave, onClose, selectedDate }: newEventProps) => {
     const [title, setTitle] = useState('');
     const [error, setError] = useState(false);
 

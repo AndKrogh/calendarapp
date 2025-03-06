@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { CalendarHeader } from '../CalendarHeader/CalendarHeader';
 import { Day } from '../Day/Day';
-import { NewEventModal } from '../NewEventModal/NewEventModal';
+import { NewEventModal } from '../NewEventModal/NewEventmodal';
 import { DeleteEventModal } from '../DeleteEventModal/DeleteEventModal';
 import { useDate } from '../hooks/useDate';
 import { useFirestore } from '../hooks/UseFirebase'; 

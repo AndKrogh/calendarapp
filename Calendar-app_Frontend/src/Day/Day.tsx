@@ -3,7 +3,7 @@ import React from 'react';
 interface Dayprops {
     day: {
         value: string;
-        isCurrentDay: boolean;
+        isCurrentDay?: boolean;
         event?: { name: string };
     }
     onClick: () => void;
