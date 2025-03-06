@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 interface newEventProps {
-    onSave: (event: eventId) => void;
+    onSave: (event: { name: string; date: string; }) => void;
     onClose: () => void;
     selectedDate: string;
 }

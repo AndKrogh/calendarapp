@@ -7,7 +7,6 @@ import { useDate } from '../hooks/useDate';
 import { useFirestore } from '../hooks/UseFirebase'; 
 
 interface Event {
-    id: string;
     date: string;
     name: string;
 }
@@ -27,6 +26,8 @@ function App() {
     const { days, dateDisplay } = useDate(events, nav);
 
     if (loading) return <div>Loading events...</div>;
+
+    const selectedEvent = clicked ? events.find((e: Event) => e.date === clicked.date) : undefined;
 
     return (
         <>
@@ -62,7 +63,7 @@ function App() {
             </div>
 
             {
-                clicked && !events.find((e:Event) => e.date === clicked) &&
+                clicked && !selectedEvent &&
                 <NewEventModal
                     selectedDate={clicked}
                     onClose={() => setClicked(null)}
@@ -74,7 +75,7 @@ function App() {
             }
 
             {
-                clicked && events.find((e) => e.date === clicked) &&
+                clicked && selectedEvent &&
                 <DeleteEventModal
                     eventId={events.find(e => e.date === clicked)?.id}
                     eventText={events.find(e => e.date === clicked)?.name}
