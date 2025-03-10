@@ -26,22 +26,22 @@ export const useFirestore = () => {
         }
     };
 
-    const addEvent = async (event) => {
+    const addEvent = async (event: Event): Promise<void> => {
         try {
             const response = await fetch(`${API_URL}/events/addEvent`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(event), 
+                body: JSON.stringify(event),
             });
 
-            const data = await response.json();
+            const data: { id: string } = await response.json();
             setEvents([...events, { id: data.id, ...event }]);
         } catch (error) {
             console.error("Error adding event:", error);
         }
     };
 
-    const deleteEvent = async (eventId) => {
+    const deleteEvent = async (eventId:string): Promise<void> => {
         try {
             const response = await fetch(`${API_URL}/events/deleteEvent/${eventId}`, {
                 method: 'DELETE',
