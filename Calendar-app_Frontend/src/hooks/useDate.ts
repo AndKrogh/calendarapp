@@ -17,11 +17,11 @@ interface UseDateResult {
     dateDisplay: string;
 }
 
-export const useDate = (events, nav) => {
+export const useDate = (events: Event[], nav:number): UseDateResult => {
     const [dateDisplay, setDateDisplay] = useState('');
     const [days, setDays] = useState([]);
 
-    const formatDate = (dateString) => {
+    const formatDate = (dateString:Date): string => {
         const date = new Date(dateString);
         if (isNaN(date)) return 'Invalid Date';
 
