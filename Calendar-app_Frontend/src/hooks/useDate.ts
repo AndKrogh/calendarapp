@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
+interface Event {
+    date: string;
+    [key: string]: any; // Allow additional properties
+}
+
 export const useDate = (events, nav) => {
     const [dateDisplay, setDateDisplay] = useState('');
     const [days, setDays] = useState([]);
