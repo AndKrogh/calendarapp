@@ -12,6 +12,11 @@ interface Day {
     date: string;
 }
 
+interface UseDateResult {
+    days: Day[];
+    dateDisplay: string;
+}
+
 export const useDate = (events, nav) => {
     const [dateDisplay, setDateDisplay] = useState('');
     const [days, setDays] = useState([]);
