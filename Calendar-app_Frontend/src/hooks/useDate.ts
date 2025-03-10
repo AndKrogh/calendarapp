@@ -22,23 +22,22 @@ export const useDate = (events: Event[], nav:number): UseDateResult => {
     const [days, setDays] = useState([]);
 
     const formatDate = (dateString:Date): string => {
-        const date = new Date(dateString);
-        if (isNaN(date)) return 'Invalid Date';
+        if (isNaN(dateString.getTime())) return 'Invalid Date';
 
         return new Intl.DateTimeFormat('en-US', {
             month: 'long',
             day: 'numeric',
             year: 'numeric',
-        }).format(date);
+        }).format(dateString);
     };
 
-    const eventForDate = (date) => {
+    const eventForDate = (date:string): Event | undefined => {
 
         return events.find(e => {
             if (!e.date) return false;
 
             const eventDate = new Date(e.date);
-            if (isNaN(eventDate)) return false;
+            if (isNaN(eventDate.getTime())) return false;
 
             const formattedEventDate = eventDate.toISOString().split('T')[0];
             const formattedCalendarDate = new Date(date).toISOString().split('T')[0];
