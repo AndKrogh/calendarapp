@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react';
 
 const API_URL = 'http://localhost:3002'; 
+interface Event {
+    id?: string;
+    title: string;
+    date: string;
+    location?: string;
+    description?: string;
+}
 
 export const useFirestore = () => {
     const [events, setEvents] = useState([]);
