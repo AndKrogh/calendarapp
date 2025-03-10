@@ -57,7 +57,7 @@ export const useFirestore = () => {
         }
     };
 
-    const updateEvent = async (eventId, updatedData) => {
+    const updateEvent = async (eventId: string, updatedData: Partial<Event>): Promise<void> => {
         try {
             const response = await fetch(`${API_URL}/events/updateEvent/${eventId}`, {
                 method: 'PUT',
