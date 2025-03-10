@@ -5,6 +5,13 @@ interface Event {
     [key: string]: any; // Allow additional properties
 }
 
+interface Day {
+    value: number;
+    event?: Event;
+    isCurrentDay: boolean;
+    date: string;
+}
+
 export const useDate = (events, nav) => {
     const [dateDisplay, setDateDisplay] = useState('');
     const [days, setDays] = useState([]);
