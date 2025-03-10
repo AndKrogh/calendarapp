@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 interface Event {
     date: string;
-    [key: string]: any; // Allow additional properties
+    [key: string]: any; 
 }
 
 interface Day {
