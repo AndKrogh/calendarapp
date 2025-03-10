@@ -10,14 +10,14 @@ interface Event {
 }
 
 export const useFirestore = () => {
-    const [events, setEvents] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [events, setEvents] = useState<Event[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
-    const fetchEvents = async () => {
+    const fetchEvents = async (): Promise<void> => {
         try {
             setLoading(true);
             const response = await fetch(`${API_URL}/events/getDataFromFireStore`);
-            const data = await response.json();
+            const data: Event[] = await response.json();
             setEvents(data);
         } catch (error) {
             console.error('Error fetching events:', error);
