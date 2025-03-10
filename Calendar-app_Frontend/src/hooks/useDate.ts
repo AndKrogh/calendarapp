@@ -17,9 +17,9 @@ interface UseDateResult {
     dateDisplay: string;
 }
 
-export const useDate = (events: Event[], nav:number): UseDateResult => {
-    const [dateDisplay, setDateDisplay] = useState('');
-    const [days, setDays] = useState([]);
+export const useDate = (events: Event[], nav: number): UseDateResult => {
+    const [dateDisplay, setDateDisplay] = useState<string>('');
+    const [days, setDays] = useState<Day[]>([]);
 
     const formatDate = (dateString:Date): string => {
         if (isNaN(dateString.getTime())) return 'Invalid Date';
@@ -70,7 +70,7 @@ export const useDate = (events: Event[], nav:number): UseDateResult => {
         setDateDisplay(`${dt.toLocaleDateString('en-us', { month: 'long' })} ${year}`);
         const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
 
-        const daysArr = [];
+        const daysArr: Day[] = [];
 
         for (let i = 1; i <= paddingDays + daysInMonth; i++) {
             const dateObj = new Date(year, month, i - paddingDays);
